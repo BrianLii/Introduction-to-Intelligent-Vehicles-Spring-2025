@@ -1,0 +1,34 @@
+\subsubsection{Safety Performance} % safety
+% events, bias 
+
+H. Shao et al. (2023) introduced the Drive in Occlusion Simulation (DOS) benchmark to better evaluate the performance and security of ReasonNet. The DOS benchmark provides a comprehensive assessment of autonomous vehicles using four challenging types: parking, sudden braking, left-wing and red light breaches, with 25 different situations for each type.
+
+The benchmark is designed to test ReasonNet's time-effective reasoning capabilities for intermittent closed objects, as well as its ability to conduct global reasoning for continuous blocked object with interactive clues. This comprehensive assessment ensures that ReasonNet's predictive and perceptive capabilities are thoroughly tested.
+
+Test results on the DOS benchmark showed that ReasonNet scored the highest points in infraction penalty on CARLA leaderboard. Studies have confirmed the key role of temporary and global reasoning modules, which have been deleted and which have seen a decrease in performance.
+
+
+
+\subsubsection{InterFuser v.s TransFuser\texorpdfstring{$++$}{++}}
+TF$++$ and InterFuser enhance TransFuser, although they employ distinct approaches to achieve this improvement. TF$++$ surpasses TransFuser by prioritizing the mitigation of training biases, hence facilitating the recovery from deviations and ensuring consistent speed. However, it fails to particularly tackle the issues of completing routes or improving the overall driving score.
+
+InterFuser surpasses TransFuser because to its all-encompassing sensor fusion methodology and its strong focus on safety and interpret ability. Consequently, this leads to enhanced comprehension of the environment and more prudent choices when driving.
+
+InterFuser demonstrates superior performance compared to TF$++$ on the CARLA leaderboard. We believe that the main factor behind this is that although TF$++$ tackles training biases, it does not offer explicit techniques to enhance route completion, resulting in decreased driving scores. InterFuser's extensive scene comprehension and adherence to safety limitations lead to improved driving scores and superior overall performance, establishing it as the leading option for autonomous driving in intricate surroundings.
+
+\subsubsection{Trajectory-Based v.s TCP}
+% trajectory base / control base 
+% TCP good: consider the control branch, good infration penalty
+% TCP bad: poor control signal,
+% dataset has fewer non-trivial condition, cannot reflect the strength of TCP
+
+The models we surveyed are trajectory-based, with the exception of TCP. TCP employs a hybrid approach, as it considers the control branch, where control signals are directly optimized. This approach is designed to mitigate the inertia problem commonly associated with PID controllers, which are adopted by the trajectory-based methods. Consequently, TCP achieves a better Infraction Penalty score. However, ReasonNet, a trajectory-based method, outperforms TCP and achieves state-of-the-art performance. We believe this is because TCP's trajectory branch does not generate signals as robust as ReasonNet's. Additionally, TCP uses fewer sensors than ReasonNet. Incorporating additional sensors, such as Lidar, would require significant changes to TCP's architecture. Moreover, the dataset's limited non-trivial conditions may not fully showcase TCP's strengths.
+
+
+
+% Transfuser route completion 高分是 highly based on bias, Transfuser++ 解決 bias 但沒有提出相對應怎麼 route completion 
+
+% TCP -> Interfuser -> ReasonNet -> Transfuser++
+% transfuser  -> interfuser
+%             -> transfuser++
+

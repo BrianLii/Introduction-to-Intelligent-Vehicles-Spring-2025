@@ -1,0 +1,43 @@
+Recent advancements in end-to-end driving systems have shown remarkable improvements, but they also introduce certain biases that can impact real-world performance. Two significant biases are lateral recovery bias and waypoint ambiguity bias, both of which stem from the models' interaction with target points (TPs) and waypoints, respectively. Understanding these biases is crucial for developing more robust and reliable driving systems.
+
+Lateral recovery bias refers to the tendency of these systems to correct compounding steering errors over time by steering towards predefined TPs along a route. These TPs provide geometric cues that the model uses for navigation. When a vehicle deviates from its intended path, the model steers back towards the nearest TP, typically recentering the vehicle within the lane. However, reliance on TPs as corrective signals can lead to issues when the TPs are too far apart, causing the model to make large, abrupt steering adjustments that can result in catastrophic errors.
+
+Waypoint ambiguity bias arises from using waypoints as output representations. This creates ambiguity because the model must commit to a single point estimate, despite the multimodal nature of future vehicle velocities. While this allows for smooth interpolation between paths, it often fails to capture the full range of possible future states, leading to inaccuracies.
+
+Transfuser$++$ (TF$++$) \cite{jaeger2023hidden} is developed to mitigate the impact of the two biases. TF$++$ is significantly simpler than the previous state-of-the-art, Interfuser, yet it outperforms it by a large margin on the Longest6 benchmark. Utilizing approximately four times less data, one camera instead of four, and eliminating the need for complex heuristics to extract throttle and brake commands for the path output, TF$++$ achieves superior performance.
+
+\subsubsection{Brief Explanation of TransFuser\texorpdfstring{$++$}{++}}
+
+\paragraph{Input and Output Representations.}
+
+The input representation for TransFuser$++$ includes RGB images, LiDAR bird's eye view (BEV) data, and GNSS coordinates of target points (TPs). These inputs are processed through a multi-modal fusion architecture. The model output consists of path predictions and target speeds, which guide the vehicle's steering and speed.
+
+\paragraph{Model Architecture.}
+
+TransFuser$++$ integrates multiple sensor modalities to create a comprehensive environmental representation essential for autonomous navigation. The architecture includes components for image and bird’s-eye view (BEV) segmentation, depth estimation, bounding box prediction, and target speed classification.
+
+The model processes inputs from an RGB camera and a LiDAR sensor. The RGB camera captures high-resolution images, while the LiDAR sensor provides 360° coverage of the surroundings. These inputs are processed through parallel branches, which allow the model to capture both detailed visual information and spatially extensive geometric data:
+
+Image Branch: Uses a convolutional neural network backbone to extract features from the RGB images.\\
+BEV Branch: Processes voxelized LiDAR data through convolutional layers to produce BEV features.
+
+For addressing lateral recovery bias, TransFuser$++$ replaces global average pooling (GAP) with a transformer decoder to retain spatial information in the BEV features. This design choice mitigates the shortcut learning of steering directly towards TPs, which leads to catastrophic errors like cutting turns. The transformer decoder utilizes cross-attention mechanisms, maintaining the spatial context and effectively integrating features from different sensor modalities. This approach ensures the model makes nuanced decisions based on comprehensive environmental understanding rather than overly relying on TPs. To address the longitudinal averaging bias, TransFuser$++$ disentangles the path prediction from target speed prediction. 
+
+\begin {itemize}
+	\item Path Prediction: Using a recurrent neural network (GRU) decoder to predict the vehicle’s future path as a series of waypoints spaced by fixed distances rather than fixed time intervals. This method isolates the geometric path from temporal predictions, reducing ambiguity.
+	\item Target Speed Prediction: Implementing a multi-layer perceptron (MLP) classifier to predict target speeds. This classifier incorporates prediction uncertainties, allowing the model to consider multiple possible future velocities. By weighting the target speeds according to their predicted confidence, the model can slow down under uncertainty, thus reducing collisions.
+\end{itemize}
+
+\subsubsection*{Limitations}
+
+Although Transfuser$++$ deals with common biases of other models, it still has a few noteworthy limitations.
+
+One of the primary limitations of TransFuser$++$ is its focus on low-speed urban driving scenarios. The model's validation primarily occurs within the CARLA simulator, which involves relatively low speeds (under 35 km/h). This constrained environment does not account for the complexities and challenges associated with high-speed driving or highway conditions, leaving its performance in these scenarios untested and unverified. As a result, the applicability of TransFuser$++$ in real-world settings involving varied speed requirements remains uncertain.
+
+A significant aspect of TransFuser$++$'s functionality is its dependence on target points (TPs) for navigation and error recovery. This reliance introduces two main issues. First, the model assumes precise localization and mapping to provide accurate TPs, which CARLA ensures. However, in real-world environments, such precision may not always be guaranteed, potentially leading to navigation errors. Second, TransFuser$++$ tends to exhibit shortcut learning by heavily depending on nearby TPs to correct its path, especially when it deviates from the lane. This behavior can result in significant steering errors, such as cutting turns too sharply when TPs are far from the vehicle's current position, leading to unsafe driving behaviors.
+
+The evaluation scenarios for TransFuser$++$ do not include static obstacles within lanes, such as parked cars or debris, which are common in urban environments. Consequently, the model's ability to navigate around these obstacles has not been thoroughly tested, limiting its effectiveness in real-world urban driving scenarios where such obstacles are frequent.
+
+TransFuser$++$ uses waypoints as an output representation, which is inherently ambiguous due to the entanglement of future vehicle velocities with the path. This ambiguity can impact the model's ability to predict accurate future positions under varying speed conditions, potentially compromising navigation and control precision. Although this continuous nature helps in reducing collisions by interpolating to slow down, the representation is less interpretable and does not explicitly expose uncertainties.
+
+While TransFuser$++$ incorporates improvements such as transformer-based pooling and data augmentation, these techniques come with their limitations. The shift from global average pooling (GAP) to transformer decoders preserves spatial information but requires significant computational resources, which may not be efficient for real-time applications. Moreover, the shift and rotation augmentations used to simulate lateral recovery scenarios may not comprehensively cover the wide range of potential real-world deviations and errors, limiting the model's robustness to unseen disturbances.

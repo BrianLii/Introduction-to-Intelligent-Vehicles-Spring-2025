@@ -1,0 +1,11 @@
+This survey presents an in-depth evaluation of advanced autonomous driving models using the CARLA simulator. The models examined are ReasonNet, InterFuser, TransFuser$++$, and the TCP framework. Each model addresses different challenges inherent in autonomous driving, such as handling rare events, sensor fusion, training biases, and integrating control-based and trajectory-based approaches.
+
+\textbf{ReasonNet} focuses on handling rare events through temporal and global reasoning modules, significantly enhancing decision-making in complex urban environments. However, it is limited by its high reliance on high-quality sensor data and computational load.
+
+\textbf{InterFuser} uses advanced convolutional neural networks and transformer models to fuse data from multiple sensors, improving safety and interpretability. It addresses the limitations of conventional sensor fusion methods but faces challenges related to real-time scalability.
+
+\textbf{TransFuser$++$} simplifies the model architecture while adding a few extra components to mitigate biases in end-to-end driving systems. It separates path prediction from speed prediction to reduce errors associated with lateral recovery and waypoint ambiguity. Despite its improvements, it is primarily validated in low-speed urban scenarios and has limitations regarding static obstacle detection and real-world application.
+
+\textbf{TCP} framework integrates trajectory-based and control-based methods to optimize control signals and improve stability. It uses a hybrid approach to mitigate the inertia problems of PID controllers and the deferred reactions of control-based methods. However, it may face the challenge of limited generalizability when incorporating other trajectory-based methods to improve trajectory signals.
+
+In summary, this report concludes the limitations and performance of different models, and potential explanations for their performance. While these works are not flawless and face numerous challenges in real-world application, they still contribute to the broader understanding and advancement of this research domain.

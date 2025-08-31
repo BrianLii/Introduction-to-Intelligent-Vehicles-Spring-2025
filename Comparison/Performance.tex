@@ -1,0 +1,20 @@
+In the CARLA simulator, the performance of autonomous driving models is evaluated using three crucial metrics: Driving Score, Route Completion, and Infraction Penalty\cite{carla_leaderboard}. 
+
+\textbf{Driving score} is the main assessment indicator, combining route completion and penalties for violations. It is the multiplication of the penalty factor for the violation and the percentage of completion of the route.
+
+\textbf{Route completion} measures the majority of allocated routes successfully completed by the automatic agent. It is expressed in percentage of the total route.
+
+\textbf{Infraction Penalty} uses geometric sequence to punish agents for various driving violations (such as crashes or traffic violations), thereby reducing overall driving scores.
+
+The table below shows the performance of each model \cite{paperswithcode_carla_leaderboard}.
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{cccc}
+                    & Driving Score & Route Completion  & Infraction Penalty \\ \hline
+        ReasonNet   & 79.95         & 89.89             & 0.89 \\ \hline
+        InterFuser  & 76.18         & 88.23             & 0.84 \\ \hline
+        TCP         & 75.14         & 85.63             & 0.87 \\ \hline
+        TF$++$      & 66.32         & 78.57             & 0.84 \\ \hline
+    \end{tabular}
+    \caption{Performance metrics of four different models in the CARLA simulator}
+\end{table}
