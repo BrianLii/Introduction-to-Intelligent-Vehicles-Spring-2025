@@ -32,8 +32,3 @@ Full report: [Report.pdf](doc/Report.pdf)
 National Taiwan University
 * **Chang-Yen Li** (B09902054)
 * **Yun-Fang Li** (B08502041)
-
-## 📌 License
-
-This project is released for academic and research purposes.
-Please cite appropriately if you reference this work.
