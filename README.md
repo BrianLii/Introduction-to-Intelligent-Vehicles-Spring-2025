@@ -11,7 +11,7 @@ The survey evaluates their performance on CARLA metrics (Driving Score, Route Co
 
 ## 📄 Report
 
-Full report: [Report.pdf](doc/Report.pdf)
+Full report: [Report.pdf](docs/Report.pdf)
 ## 📊 Key Findings
 
 * **ReasonNet** achieves the highest Driving Score in CARLA but is computationally heavy.
